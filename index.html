@@ -131,6 +131,35 @@ select { font: 500 15px var(--f-body); color: var(--ink); background: var(--pape
 .gear dt { font: 500 12px/1.6 var(--f-data); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
 .gear dd { min-width: 0; }
 
+.viz { display: flex; flex-direction: column; gap: 8px; }
+.viz h3 { margin-bottom: 0; }
+.dz { display: block; width: 100%; max-width: 420px; height: auto; }
+.dz * { stroke-linecap: round; stroke-linejoin: round; }
+.d-rod { stroke: var(--ink); stroke-width: 5; fill: none; }
+.d-main { stroke: var(--ink); stroke-width: 2; fill: none; }
+.d-lead { stroke: var(--sea); stroke-width: 2; fill: none; }
+.d-thin { stroke: var(--ink); stroke-width: 1.4; fill: none; }
+.d-fill { fill: var(--sea); }
+.d-buoy { fill: var(--buoy); }
+.d-ink { fill: var(--ink); }
+.d-eye { fill: var(--panel); }
+.d-ring { fill: none; stroke: var(--panel); stroke-width: 1.6; }
+.d-reel { fill: var(--panel); stroke: var(--ink); stroke-width: 2; }
+.d-knot { fill: var(--buoy); }
+.d-bottom { stroke: var(--line); stroke-width: 2; stroke-dasharray: 5 5; fill: none; }
+.d-fat { stroke: var(--buoy); stroke-width: 7; fill: none; }
+.d-paper { stroke: var(--panel); stroke-width: 1.5; fill: none; }
+.d-badge { fill: var(--buoy); }
+.d-badge-t { fill: var(--panel); font: 600 10px var(--f-data); }
+.d-lbl { fill: var(--muted); font: 500 11px var(--f-body); }
+.lg { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 6px 12px; font-size: 13px; }
+.lg li { display: flex; gap: 8px; align-items: flex-start; min-width: 0; }
+.lg b { flex: none; width: 18px; height: 18px; border-radius: 50%; background: var(--buoy); color: var(--panel); font: 600 11px/18px var(--f-data); text-align: center; }
+.steps { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 6px; }
+.terms { display: grid; gap: 8px; }
+.terms dt { font-weight: 600; }
+.terms dd { color: var(--muted); font-size: 13px; }
+
 .foot { font-size: 12.5px; color: var(--muted); display: flex; flex-direction: column; gap: 6px; }
 @media (prefers-reduced-motion: no-preference) { .bar i { transition: width .35s ease; } }
 </style>
@@ -247,6 +276,102 @@ select { font: 500 15px var(--f-body); color: var(--ink); background: var(--pape
       press: { down: .7, steady: 1, up: .85 },
       gear: { olta: 'Eging kamışı 2.4–2.7 m', ip: 'Örgü ip PE 0.6–0.8; 0.25 mm floro ön', yem: 'Kalamar sakarı 2.5–3.0 numara; gece loş ışıkta kontrast renk', teknik: 'Sakin, berrak su ve limanlık. Sakarı dibe bırak, kısa sıçratmalarla çek.' } }
   ];
+
+  /* ---------- takım şemaları (kendi çizimimiz, markasız) ---------- */
+  function badge(n, x, y) {
+    return '<circle cx="' + x + '" cy="' + y + '" r="8" class="d-badge"/><text x="' + x + '" y="' + (y + 3.5) + '" text-anchor="middle" class="d-badge-t">' + n + '</text>';
+  }
+  var RIGS = {
+    spin: {
+      title: 'Spin takımı', vb: '0 0 340 146',
+      legend: ['Kamış', 'Makara', 'Ana ip (örgü PE)', 'Düğüm', 'Ön misina (floro)', 'Suni yem'],
+      svg: '<line x1="8" y1="96" x2="135" y2="58" class="d-rod"/>' +
+        '<line x1="44" y1="96" x2="44" y2="85" class="d-thin"/><circle cx="44" cy="104" r="8" class="d-reel"/>' +
+        '<path d="M135 58 Q172 58 200 80" class="d-main"/>' +
+        '<circle cx="200" cy="80" r="4" class="d-knot"/>' +
+        '<path d="M200 80 Q232 90 262 100" class="d-lead"/>' +
+        '<g transform="translate(262 100) rotate(14)"><ellipse cx="22" cy="0" rx="22" ry="7" class="d-fill"/><polygon points="42,0 54,-6 54,6" class="d-fill"/><circle cx="8" cy="-2" r="1.7" class="d-eye"/><line x1="0" y1="2" x2="-7" y2="8" class="d-thin"/><path d="M22 7 q0 8 6 8" class="d-thin"/></g>' +
+        badge(1, 62, 62) + badge(2, 44, 128) + badge(3, 168, 46) + badge(4, 200, 104) + badge(5, 240, 76) + badge(6, 292, 132)
+    },
+    capari: {
+      title: 'Çapari takımı', vb: '0 0 340 190',
+      legend: ['Ana misina', 'Çapari kolu', 'İğne ve tüy (yapay yem)', 'Kurşun'],
+      svg: '<line x1="96" y1="8" x2="170" y2="16" class="d-rod"/>' +
+        '<line x1="170" y1="16" x2="170" y2="150" class="d-main"/>' +
+        [[40, 1], [68, -1], [96, 1], [124, -1]].map(function (a) {
+          var x2 = 170 + a[1] * 30, y2 = a[0] + 8;
+          return '<line x1="170" y1="' + a[0] + '" x2="' + x2 + '" y2="' + y2 + '" class="d-thin"/>' +
+            '<ellipse cx="' + x2 + '" cy="' + (y2 + 7) + '" rx="3.2" ry="8" class="d-buoy"/>' +
+            '<path d="M' + x2 + ' ' + (y2 + 14) + ' q0 6 ' + (-a[1] * 6) + ' 5" class="d-thin"/>';
+        }).join('') +
+        '<path d="M170 150 l-9 16 q9 10 18 0 z" class="d-ink"/>' +
+        badge(1, 190, 26) + badge(2, 216, 36) + badge(3, 118, 78) + badge(4, 198, 162)
+    },
+    dip: {
+      title: 'Dip takımı', vb: '0 0 340 150',
+      legend: ['Kamış', 'Makara', 'Ana misina', 'Kurşun', 'Fırdöndü (girdap)', 'Kol misina', 'İğne ve yem'],
+      svg: '<line x1="8" y1="92" x2="130" y2="22" class="d-rod"/>' +
+        '<line x1="40" y1="77" x2="40" y2="86" class="d-thin"/><circle cx="40" cy="92" r="7" class="d-reel"/>' +
+        '<line x1="0" y1="126" x2="340" y2="126" class="d-bottom"/>' +
+        '<path d="M130 22 Q190 40 205 104" class="d-main"/>' +
+        '<path d="M205 104 l-8 14 q8 8 16 0 z" class="d-ink"/>' +
+        '<circle cx="226" cy="114" r="3.5" class="d-reel"/>' +
+        '<line x1="230" y1="114" x2="294" y2="114" class="d-lead"/>' +
+        '<ellipse cx="306" cy="113" rx="12" ry="7" class="d-buoy"/><path d="M296 117 q-1 12 11 11" class="d-thin"/>' +
+        badge(1, 58, 40) + badge(2, 38, 110) + badge(3, 156, 56) + badge(4, 205, 142) + badge(5, 226, 94) + badge(6, 262, 94) + badge(7, 306, 142)
+    }
+  };
+  var SHAPES = {
+    minnow: '<ellipse cx="0" cy="0" rx="22" ry="7" class="d-fill"/><polygon points="20,0 31,-6 31,6" class="d-fill"/><circle cx="-12" cy="-2" r="1.7" class="d-eye"/><line x1="-21" y1="2" x2="-28" y2="9" class="d-thin"/>',
+    shad: '<path d="M-24 0 Q-12 -9 8 -5 L16 -5 Q22 -12 30 -10 Q26 0 30 10 Q22 12 16 5 L8 5 Q-12 9 -24 0Z" class="d-fill"/><circle cx="-15" cy="-2" r="1.6" class="d-eye"/>',
+    kasik: '<ellipse cx="0" cy="0" rx="22" ry="11" class="d-fill" transform="rotate(-20)"/><circle cx="-17" cy="6" r="2.2" class="d-ring"/><path d="M12 -6 q8 -4 14 2" class="d-thin"/>',
+    popper: '<path d="M-20 -8 Q-25 0 -20 8 L16 6 Q26 4 26 0 Q26 -4 16 -6 Z" class="d-fill"/><circle cx="-11" cy="-3" r="1.6" class="d-eye"/>',
+    jig: '<path d="M-24 0 Q-10 -7 10 -6 L24 0 L10 6 Q-10 7 -24 0Z" class="d-fill"/><circle cx="-18" cy="0" r="2" class="d-ring"/>',
+    midye: '<ellipse cx="0" cy="0" rx="17" ry="11" class="d-buoy"/><path d="M-9 -8 Q-13 0 -9 8 M0 -10 Q-3 0 0 10 M9 -8 Q6 0 9 8" class="d-paper"/>',
+    karides: '<path d="M-16 8 Q-18 -8 0 -9 Q14 -9 17 3" class="d-fat"/><path d="M17 3 l7 4 M17 3 l6 -1 M-16 8 l-6 4" class="d-thin"/>',
+    yengec: '<ellipse cx="0" cy="2" rx="14" ry="9" class="d-buoy"/><circle cx="-18" cy="-9" r="5" class="d-buoy"/><circle cx="18" cy="-9" r="5" class="d-buoy"/><path d="M-12 8 l-8 7 M-5 10 l-4 8 M5 10 l4 8 M12 8 l8 7" class="d-thin"/>'
+  };
+  function baitsSvg(items) {
+    var step = 340 / items.length;
+    return items.map(function (it, i) {
+      var cx = Math.round(step * i + step / 2);
+      return '<g transform="translate(' + cx + ' 32)">' + SHAPES[it[0]] + '</g><text x="' + cx + '" y="74" text-anchor="middle" class="d-lbl">' + it[1] + '</text>';
+    }).join('');
+  }
+  var EXTRA = {
+    'Lüfer': {
+      rigs: ['spin', 'capari'],
+      baits: [['kasik', 'Kaşık'], ['minnow', 'Minnow'], ['jig', 'Jig']],
+      steps: ['Ana ipi makaraya doldur.', 'Ucuna 0.40–0.50 mm floro ya da tel ön misinayı düğümle bağla. Lüfer dişiyle ince ipi keser.', 'Ön misinanın ucuna kaşık ya da minnow tak. Çapari kullanacaksan çaparıyı ana misinanın ucuna bağla, en alta kurşun koy.'],
+      terms: [['Ana ip', 'Makaraya sarılan asıl ip.'], ['Ön misina (floro)', 'Ana ipin ucuna bağlanan kısa, aşınmaya dayanıklı, suda az görünen misina.'], ['Çapari', 'Tek ipe dizili, tüy ya da plastik yemli birkaç iğneli hazır takım.'], ['Kaşık', 'Suda dönerek küçük balığı taklit eden parlak metal yem.'], ['Minnow', 'Küçük balık şeklinde sert plastik yem.']]
+    },
+    'Levrek': {
+      rigs: ['spin'],
+      baits: [['minnow', 'Minnow'], ['shad', 'Shad'], ['popper', 'Yüzey suni']],
+      steps: ['Örgü ipi (PE) makaraya doldur.', 'Ucuna 1–1.5 m, 0.30–0.35 mm floro ön misinayı düğümle bağla.', 'Ön misinanın ucuna klips ile suni yemi tak, dalgakıran ucunu ve köpük hattını tara.'],
+      terms: [['PE (örgü ip)', 'İnce ama çok güçlü, esnemeyen ip. Numara büyüdükçe kalınlaşır.'], ['Floro', 'Suda az görünen, sert ve aşınmaya dayanıklı misina. Ön misina olarak kullanılır.'], ['Shad', 'Yumuşak silikon balık yemi, kuyruğu su içinde oynar.'], ['Yüzey suni (popper)', 'Suyun yüzünde sıçrayıp ses çıkaran yem.'], ['Klips', 'Yemi düğümsüz ve hızlı değiştirmeye yarayan küçük kilit.']]
+    },
+    'Çipura': {
+      rigs: ['dip'],
+      baits: [['midye', 'Midye'], ['karides', 'Karides'], ['yengec', 'Yengeç']],
+      steps: ['Ana misinayı (0.28–0.35 mm) dip kamışının makarasına doldur.', 'Ucuna kurşunu ve fırdöndüyü tak, fırdöndünün diğer ucuna 40–80 cm kol misinayı ve iğneyi bağla.', 'Yemi iğneye geçir, at, misinayı hafif gerdir. Kamışın ucundaki titremeyi izle.'],
+      terms: [['Dip takımı', 'Kurşunla dibe yatan ve yemi dipte bekleten takım.'], ['Kurşun', 'Takımı atmaya ve dipte tutmaya yarayan ağırlık.'], ['Fırdöndü (girdap)', 'İki ip arasında dönen küçük parça, misinanın burulmasını önler.'], ['Kol misina', 'Kurşunun yanından ayrılan, iğneyi taşıyan ince misina.'], ['İğne numarası', 'Numara büyüdükçe iğne küçülür (2 numara 4 numaradan büyüktür).']]
+    }
+  };
+  function extraHtml(sp) {
+    var ex = EXTRA[sp.ad];
+    if (!ex) return '';
+    var h = '';
+    ex.rigs.forEach(function (id) {
+      var r = RIGS[id];
+      h += '<div class="viz"><h3>' + r.title + '</h3><svg class="dz" viewBox="' + r.vb + '" role="img" aria-label="' + r.title + ' şeması">' + r.svg + '</svg>' +
+        '<ol class="lg">' + r.legend.map(function (t, i) { return '<li><b>' + (i + 1) + '</b><span>' + t + '</span></li>'; }).join('') + '</ol></div>';
+    });
+    h += '<div class="viz"><h3>Yem şekilleri</h3><svg class="dz" viewBox="0 0 340 84" role="img" aria-label="Yem şekilleri">' + baitsSvg(ex.baits) + '</svg></div>';
+    h += '<div><h3>Üç adımda kurulum</h3><ol class="steps">' + ex.steps.map(function (s) { return '<li>' + s + '</li>'; }).join('') + '</ol></div>';
+    h += '<div><h3>Terimler</h3><dl class="terms">' + ex.terms.map(function (t) { return '<div><dt>' + t[0] + '</dt><dd>' + t[1] + '</dd></div>'; }).join('') + '</dl></div>';
+    return h;
+  }
 
   var FACT = [['season','Mevsim',.26],['temp','Su sıcaklığı',.24],['tod','Saat',.16],['wave','Dalga',.12],['wind','Rüzgâr',.09],['press','Basınç',.08],['moon','Ay',.05]];
 
@@ -501,7 +626,7 @@ select { font: 500 15px var(--f-body); color: var(--ink); background: var(--pape
         '<div><dt>Olta</dt><dd>' + sp.gear.olta + '</dd></div>' +
         '<div><dt>İp</dt><dd>' + sp.gear.ip + '</dd></div>' +
         '<div><dt>Yem</dt><dd>' + sp.gear.yem + '</dd></div>' +
-        '<div><dt>Teknik</dt><dd>' + sp.gear.teknik + '</dd></div></dl></div></div></details>';
+        '<div><dt>Teknik</dt><dd>' + sp.gear.teknik + '</dd></div></dl></div>' + extraHtml(sp) + '</div></details>';
     });
     var open = {};
     document.querySelectorAll('#results details').forEach(function (d) { open[d.querySelector('.name').textContent] = d.open; });
