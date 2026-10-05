@@ -1,0 +1,16 @@
+{
+  "name": "Av Saati",
+  "short_name": "Av Saati",
+  "description": "Konumuna göre balık av ihtimali ve olta önerisi",
+  "lang": "tr",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#09181E",
+  "theme_color": "#0F5E73",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
