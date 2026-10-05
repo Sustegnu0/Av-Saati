@@ -379,7 +379,14 @@ html.lock { overflow: hidden; }
       tod: { dawn: .6, morning: .3, noon: .2, evening: .8, night: 1 },
       wind: [0,0,10,24], wave: [0,0,.3,.9], moon: function (f) { return 1 - .5 * f; },
       press: { down: .7, steady: 1, up: .85 },
-      gear: { olta: 'Eging kamışı 2.4–2.7 m', ip: 'Örgü ip PE 0.6–0.8; 0.25 mm floro ön', yem: 'Kalamar sakarı 2.5–3.0 numara; gece loş ışıkta kontrast renk', teknik: 'Sakin, berrak su ve limanlık. Sakarı dibe bırak, kısa sıçratmalarla çek.' } }
+      gear: { olta: 'Eging kamışı 2.4–2.7 m', ip: 'Örgü ip PE 0.6–0.8; 0.25 mm floro ön', yem: 'Kalamar sakarı 2.5–3.0 numara; gece loş ışıkta kontrast renk', teknik: 'Sakin, berrak su ve limanlık. Sakarı dibe bırak, kısa sıçratmalarla çek.' } },
+    { ad: 'Ahtapot', lat: 'Octopus vulgaris',
+      avail: { bogaz: .6, marmara: .9, ege: 1, karadeniz: .1, akdeniz: 1 },
+      season: [.9,.9,.7,.4,.2,.15,.15,.2,.4,.7,.9,1], temp: [9,13,20,25],
+      tod: { dawn: .8, morning: .4, noon: .25, evening: .8, night: 1 },
+      wind: [0,0,12,28], wave: [0,0,.3,.9], moon: function (f) { return 1 - .25 * f; },
+      press: { down: .8, steady: 1, up: .9 },
+      gear: { olta: 'Sağlam spin ya da eging kamışı 2.4–3.0 m, ya da el makarası', ip: 'Örgü ip PE 1.5–2.5; kayalıkta takılmaya dayanan 0.50–0.60 mm kalın floro ön misina', yem: 'Ahtapot jigi, üstüne yengeç bağlanır', teknik: 'Kayalık ve yosunlu çatlaklarda, sakin ve berrak suda. Yemi deliğin yanına indir, ahtapot sarılınca yavaşça ve sabit çek, ani çekme.' } }
   ];
 
   /* ---------- takım şemaları (kendi çizimimiz, markasız) ---------- */
@@ -434,7 +441,25 @@ html.lock { overflow: hidden; }
     jig: '<path d="M-24 0 Q-10 -7 10 -6 L24 0 L10 6 Q-10 7 -24 0Z" class="d-fill"/><circle cx="-18" cy="0" r="2" class="d-ring"/>',
     midye: '<ellipse cx="0" cy="0" rx="17" ry="11" class="d-buoy"/><path d="M-9 -8 Q-13 0 -9 8 M0 -10 Q-3 0 0 10 M9 -8 Q6 0 9 8" class="d-paper"/>',
     karides: '<path d="M-16 8 Q-18 -8 0 -9 Q14 -9 17 3" class="d-fat"/><path d="M17 3 l7 4 M17 3 l6 -1 M-16 8 l-6 4" class="d-thin"/>',
-    yengec: '<ellipse cx="0" cy="2" rx="14" ry="9" class="d-buoy"/><circle cx="-18" cy="-9" r="5" class="d-buoy"/><circle cx="18" cy="-9" r="5" class="d-buoy"/><path d="M-12 8 l-8 7 M-5 10 l-4 8 M5 10 l4 8 M12 8 l8 7" class="d-thin"/>'
+    yengec: '<ellipse cx="0" cy="2" rx="14" ry="9" class="d-buoy"/><circle cx="-18" cy="-9" r="5" class="d-buoy"/><circle cx="18" cy="-9" r="5" class="d-buoy"/><path d="M-12 8 l-8 7 M-5 10 l-4 8 M5 10 l4 8 M12 8 l8 7" class="d-thin"/>',
+    kurt: '<path d="M-22 4 q5 -12 11 0 t11 0 t11 0 t11 0" class="d-fat" style="stroke-width:5"/>',
+    egi: '<path d="M-24 0 Q-8 -9 12 -7 L20 -4 L20 4 L12 7 Q-8 9 -24 0Z" class="d-buoy"/><path d="M20 -4 l9 -3 M20 0 l10 0 M20 4 l9 3" class="d-thin"/><circle cx="-12" cy="-2" r="2" class="d-eye"/><path d="M-4 -6 l0 12" class="d-paper"/>'
+  };
+  /* spin şemasının üst kısmını (kamış, makara, ana ip, düğüm) paylaşan iki takım */
+  var SPIN_TOP = RIGS.spin.svg.split('<path d="M200 80 Q232 90 262 100"')[0];
+  RIGS.eging = {
+    title: 'Eging takımı (kalamar)', vb: '0 0 340 150',
+    legend: ['Eging kamışı', 'Makara', 'Ana ip (örgü PE)', 'Düğüm', 'Ön misina (floro)', 'Sakar (egi)'],
+    svg: SPIN_TOP + '<path d="M200 80 Q232 90 262 100" class="d-lead"/>' +
+      '<g transform="translate(286 108) rotate(14)">' + SHAPES.egi + '</g>' +
+      badge(1, 62, 62) + badge(2, 44, 128) + badge(3, 168, 46) + badge(4, 200, 104) + badge(5, 240, 76) + badge(6, 292, 136)
+  };
+  RIGS.ahtapot = {
+    title: 'Ahtapot takımı', vb: '0 0 340 156',
+    legend: ['Kamış', 'Makara', 'Ana ip (örgü PE)', 'Düğüm', 'Kalın ön misina (floro)', 'Ahtapot jigi (yengeç bağlı)'],
+    svg: SPIN_TOP + '<path d="M200 80 Q236 92 272 110" class="d-lead" style="stroke-width:3"/>' +
+      '<g transform="translate(298 120) scale(1.15)">' + SHAPES.yengec + '</g><path d="M284 128 q-4 12 8 12" class="d-thin"/>' +
+      badge(1, 62, 62) + badge(2, 44, 128) + badge(3, 168, 46) + badge(4, 200, 104) + badge(5, 240, 80) + badge(6, 298, 146)
   };
   function baitsSvg(items) {
     var step = 340 / items.length;
@@ -461,6 +486,33 @@ html.lock { overflow: hidden; }
       baits: [['midye', 'Midye'], ['karides', 'Karides'], ['yengec', 'Yengeç']],
       steps: ['Ana misinayı (0.28–0.35 mm) dip kamışının makarasına doldur.', 'Ucuna kurşunu ve fırdöndüyü tak, fırdöndünün diğer ucuna 40–80 cm kol misinayı ve iğneyi bağla.', 'Yemi iğneye geçir, at, misinayı hafif gerdir. Kamışın ucundaki titremeyi izle.'],
       terms: [['Dip takımı', 'Kurşunla dibe yatan ve yemi dipte bekleten takım.'], ['Kurşun', 'Takımı atmaya ve dipte tutmaya yarayan ağırlık.'], ['Fırdöndü (girdap)', 'İki ip arasında dönen küçük parça, misinanın burulmasını önler.'], ['Kol misina', 'Kurşunun yanından ayrılan, iğneyi taşıyan ince misina.'], ['İğne numarası', 'Numara büyüdükçe iğne küçülür (2 numara 4 numaradan büyüktür).']]
+    },
+    'Palamut': {
+      rigs: ['spin', 'capari'],
+      baits: [['kasik', 'Kaşık'], ['jig', 'Jig'], ['minnow', 'Minnow']],
+      steps: ['Ana ipi makaraya doldur.', 'Ucuna 0.40 mm floro ön misinayı düğümle bağla.', 'Ön misinanın ucuna kaşık, jig ya da çapari tak. Sürü geldiğinde uzağa at ve hızlı çek.'],
+      terms: [['Jig', 'Ağır, metal, balık şeklinde yem. Uzağa atılır ve çabuk batar.'], ['Çapari', 'Tek ipe dizili, tüy ya da plastik yemli birkaç iğneli hazır takım.'], ['Floro', 'Suda az görünen, sert ve aşınmaya dayanıklı misina. Ön misina olarak kullanılır.'], ['Sürü', 'Palamut gruplar hâlinde gelir, su yüzeyinde kaynama ve martı hareketi sürüyü ele verir.']]
+    },
+    'Karagöz': {
+      rigs: ['dip'],
+      baits: [['kurt', 'Deniz kurdu'], ['karides', 'Karides'], ['midye', 'Midye']],
+      steps: ['Ana misinayı (0.25–0.30 mm) hafif kıyı kamışının makarasına doldur.', 'Kurşunu ve fırdöndüyü tak, kol misinaya küçük iğne (4–6 numara) bağla.', 'Yemi iğneye ince geçir, kayalıkta köpüren yerin yakınına at, yemi dibe yakın tut.'],
+      terms: [['Dip takımı', 'Kurşunla dibe yatan ve yemi dipte bekleten takım.'], ['Fırdöndü (girdap)', 'İki ip arasında dönen küçük parça, misinanın burulmasını önler.'], ['Kol misina', 'Kurşunun yanından ayrılan, iğneyi taşıyan ince misina.'], ['İğne numarası', 'Numara büyüdükçe iğne küçülür (4 numara 2 numaradan küçüktür).'], ['Köpük hattı', 'Dalganın kayalıkta köpürttüğü şerit. Balık yemi orada arar.']]
+    },
+    'İstavrit': {
+      rigs: ['capari'],
+      steps: ['Ana misinayı (0.25–0.30 mm) ince kamışın makarasına doldur.', 'Ucuna 6–8 iğneli çaparıyı bağla, en alta 20–40 g kurşun tak.', 'Takımı rıhtım ya da mendirek kenarında dibe yakın indir, yukarı aşağı oynat, titreme gelince çek.'],
+      terms: [['Çapari', 'Tek ipe dizili, yapay yemli birkaç iğneli hazır takım. İstavritte küçük iğneli olanı seçilir.'], ['Kurşun', 'Takımı batırmaya ve gergin tutmaya yarayan ağırlık.'], ['Düşey çekme', 'Takımı bulunduğun yerden yukarı aşağı oynatarak balığı yemlemek.']]
+    },
+    'Kalamar': {
+      rigs: ['eging'],
+      steps: ['Örgü ipi (PE 0.6–0.8) eging makarasına doldur.', 'Ucuna 0.25 mm floro ön misinayı bağla.', 'Ön misinanın ucuna sakarı klips ile tak. At, dibe indir, kısa sıçratmalarla çek ve her sıçratmadan sonra bekle.'],
+      terms: [['Sakar (egi)', 'Karides şeklinde, ucunda iğne tacı olan kalamar yemi. Kalamar kolları iğnelere takılır.'], ['Eging', 'Sakar ile kalamar avlama yöntemi.'], ['Sakar numarası', 'Numara büyüdükçe sakar büyür ve daha hızlı batar (2.5–3.0 yaygın).'], ['Ön misina (floro)', 'Örgü ipin ucuna bağlanan, suda az görünen kısa misina.']]
+    },
+    'Ahtapot': {
+      rigs: ['ahtapot'],
+      steps: ['Örgü ipi (PE 1.5–2.5) makaraya doldur.', 'Ucuna kalın, 0.50–0.60 mm floro ön misinayı bağla. Kayalıkta takılmaya dayansın.', 'Ön misinanın ucuna ahtapot jigini tak, üstüne yengeç bağla. Deliğin yanına indir, ahtapot sarılınca yavaşça ve sabit çek.'],
+      terms: [['Ahtapot jigi', 'Ağırlığı ve iğneyi birleştiren, üzerine yengeç bağlanan ahtapot yemi.'], ['Kalın floro', 'Kayalıkta aşınmaya ve takılmaya karşı kalın seçilen ön misina.'], ['Av yasağı ve boy', 'Ahtapotta av yasağı ve boy sınırı güncel Su Ürünleri Tebliği ile bölgene göre değişebilir. Çıkmadan önce kontrol et.']]
     }
   };
   function extraHtml(sp) {
@@ -472,7 +524,7 @@ html.lock { overflow: hidden; }
       h += '<div class="viz"><h3>' + r.title + '</h3><svg class="dz" viewBox="' + r.vb + '" role="img" aria-label="' + r.title + ' şeması">' + r.svg + '</svg>' +
         '<ol class="lg">' + r.legend.map(function (t, i) { return '<li><b>' + (i + 1) + '</b><span>' + t + '</span></li>'; }).join('') + '</ol></div>';
     });
-    h += '<div class="viz"><h3>Yem şekilleri</h3><svg class="dz" viewBox="0 0 340 84" role="img" aria-label="Yem şekilleri">' + baitsSvg(ex.baits) + '</svg></div>';
+    if (ex.baits) h += '<div class="viz"><h3>Yem şekilleri</h3><svg class="dz" viewBox="0 0 340 84" role="img" aria-label="Yem şekilleri">' + baitsSvg(ex.baits) + '</svg></div>';
     h += '<div><h3>Üç adımda kurulum</h3><ol class="steps">' + ex.steps.map(function (s) { return '<li>' + s + '</li>'; }).join('') + '</ol></div>';
     h += '<div><h3>Terimler</h3><dl class="terms">' + ex.terms.map(function (t) { return '<div><dt>' + t[0] + '</dt><dd>' + t[1] + '</dd></div>'; }).join('') + '</dl></div>';
     return h;
