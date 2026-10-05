@@ -165,6 +165,51 @@ select { font: 500 15px var(--f-body); color: var(--ink); background: var(--pape
 .terms dt { font-weight: 600; }
 .terms dd { color: var(--muted); font-size: 13px; }
 
+/* ---- av günlüğü ---- */
+[hidden] { display: none !important; }
+.stack { display: flex; flex-direction: column; gap: 20px; }
+.tabs { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; display: flex; gap: 6px; background: var(--paper); padding-block: 6px; }
+.tabs button { flex: 1; font: 600 15px var(--f-body); color: var(--muted); background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; min-height: 44px; cursor: pointer; }
+.tabs button[aria-selected="true"] { background: var(--sea); border-color: var(--sea); color: var(--panel); }
+.tabs button span { font: 500 12px var(--f-data); margin-left: 6px; opacity: .85; }
+.tabs button:focus-visible { outline: 2px solid var(--buoy); outline-offset: 2px; }
+button.ghost, label.ghost { font: 600 14px var(--f-body); color: var(--ink); background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 10px 14px; min-height: 44px; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; text-align: center; }
+button.ghost.danger { color: var(--buoy); }
+label.act { display: inline-flex; align-items: center; justify-content: center; font: 600 14px var(--f-body); color: var(--panel); background: var(--sea); border-radius: 8px; padding: 10px 14px; min-height: 44px; cursor: pointer; }
+.fab { position: fixed; right: 16px; bottom: calc(16px + env(safe-area-inset-bottom, 0px)); z-index: 6; box-shadow: 0 4px 14px rgba(0,0,0,.35); padding: 12px 20px; border-radius: 999px; }
+.stats3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+@media (min-width: 640px) { .grid { grid-template-columns: repeat(3, 1fr); } }
+.tile { position: relative; aspect-ratio: 4 / 5; max-width: 100%; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; background: var(--panel); padding: 0; cursor: pointer; color: #fff; text-align: left; }
+.tile:focus-visible { outline: 2px solid var(--buoy); outline-offset: 2px; }
+.tile img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.tile .noph { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; color: var(--line); }
+.tile .cap { position: absolute; left: 0; right: 0; bottom: 0; padding: 26px 10px 10px; background: linear-gradient(transparent, rgba(5, 20, 26, .85)); display: flex; flex-direction: column; gap: 3px; }
+.tile .cap b { font: 600 22px/1 var(--f-display); letter-spacing: .01em; }
+.tile .cap i { font: 500 11px/1.3 var(--f-data); font-style: normal; opacity: .92; }
+.empty { align-items: flex-start; }
+.ov { position: fixed; inset: 0; z-index: 20; background: var(--paper); overflow-y: auto; }
+.sheet { max-width: 44rem; margin: 0 auto; padding: calc(16px + env(safe-area-inset-top, 0px)) 16px calc(40px + env(safe-area-inset-bottom, 0px)); display: flex; flex-direction: column; gap: 16px; }
+.sheet-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+html.lock { overflow: hidden; }
+.ph { position: relative; aspect-ratio: 4 / 3; max-width: 100%; border: 2px dashed var(--line); border-radius: 10px; background: var(--panel); display: flex; align-items: center; justify-content: center; color: var(--muted); overflow: hidden; text-align: center; padding: 8px; }
+.ph img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.fld { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.fld > label { font: 500 12px/1.2 var(--f-data); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.fld input[type="text"], .fld input[type="number"], .fld input[type="datetime-local"], .fld select, .fld textarea {
+  font: 500 15px var(--f-body); color: var(--ink); background: var(--panel); border: 1px solid var(--line);
+  border-radius: 8px; padding: 10px 12px; min-height: 44px; width: 100%;
+}
+.fld textarea { min-height: 88px; resize: vertical; }
+.fld input:focus-visible, .fld textarea:focus-visible, .fld select:focus-visible { outline: 2px solid var(--sea); outline-offset: 2px; }
+.chk { display: flex; gap: 10px; align-items: center; font-size: 14px; }
+.chk input { width: 22px; height: 22px; accent-color: var(--sea); flex: none; }
+.bigph { display: block; width: 100%; max-height: 70vh; object-fit: contain; border-radius: 10px; background: var(--panel); }
+.dmeta { font: 500 13px/1.5 var(--f-data); color: var(--muted); }
+.dnote { white-space: pre-wrap; overflow-wrap: anywhere; }
+.err { color: var(--buoy); font-weight: 500; }
+
 .foot { font-size: 12.5px; color: var(--muted); display: flex; flex-direction: column; gap: 6px; }
 @media (prefers-reduced-motion: no-preference) { .bar i { transition: width .35s ease; } }
 </style>
@@ -176,6 +221,12 @@ select { font: 500 15px var(--f-body); color: var(--ink); background: var(--pape
     <h1>Av Saati</h1>
   </header>
 
+  <nav class="tabs" role="tablist" aria-label="Bölümler">
+    <button type="button" role="tab" id="tab-f" aria-selected="true">Tahmin</button>
+    <button type="button" role="tab" id="tab-j" aria-selected="false">Günlük<span id="jcount"></span></button>
+  </nav>
+
+  <div id="vf" class="stack">
   <section class="panel" aria-label="Konum ve deniz durumu">
     <div class="where">
       <div class="loc"><b id="wherename">Konum alınıyor…</b><span id="wheremeta"></span></div>
@@ -206,12 +257,61 @@ select { font: 500 15px var(--f-body); color: var(--ink); background: var(--pape
   <div class="alert" id="alert" role="status" hidden></div>
   <section id="results" aria-live="polite"></section>
 
+  </div>
+
+  <div id="vj" class="stack" hidden>
+    <section class="panel" id="jstats" aria-label="Özet" hidden></section>
+    <div id="jgrid" class="stack"></div>
+    <section class="panel jtools" aria-label="Yedek">
+      <div class="row2">
+        <button type="button" class="ghost" id="jexport">Yedek al</button>
+        <label class="ghost" for="jimport">Yedekten yükle</label>
+        <input type="file" id="jimport" accept="application/json,.json" hidden>
+      </div>
+      <p class="note" id="jmsg">Günlük yalnızca bu telefonda saklanır. Tarayıcı verilerini silersen kaybolur, bu yüzden ara sıra yedek al.</p>
+    </section>
+  </div>
+
   <footer class="foot">
     <p>Yüzdeler garanti değil. Mevsim, su sıcaklığı, saat, dalga, rüzgâr, basınç ve aya verilen ağırlıklarla hesaplanan bir tahmin; gerçek sonuç noktaya ve akıntıya göre değişir. Model verisi kıyıdaki küçük koyları ve akıntıyı yakalayamaz.</p>
     <p>Takım önerileri başlangıç içindir. Boy sınırı ve av yasakları için güncel Su Ürünleri Tebliği'ne bak.</p>
     <p>Hava ve deniz verisi: <a href="https://open-meteo.com" target="_blank" rel="noopener">Open-Meteo.com</a> (DWD modelleri dahil).</p>
   </footer>
 </main>
+
+<button type="button" class="act fab" id="jadd" hidden>+ Av ekle</button>
+
+<div class="ov" id="ovform" role="dialog" aria-modal="true" aria-labelledby="ovf-t" hidden>
+  <div class="sheet">
+    <div class="sheet-head"><h2 id="ovf-t">Yeni av</h2><button type="button" class="ghost" id="fclose">Kapat</button></div>
+    <form id="fform" class="stack" autocomplete="off">
+      <div class="ph" id="fphoto"><img id="fprev" alt="Seçilen fotoğraf" hidden><span id="fphint">Avının fotoğrafını ekle</span></div>
+      <div class="row2">
+        <label class="act" for="fcam">Fotoğraf çek</label>
+        <label class="ghost" for="fgal">Galeriden seç</label>
+      </div>
+      <input type="file" id="fcam" accept="image/*" capture="environment" hidden>
+      <input type="file" id="fgal" accept="image/*" hidden>
+      <div class="fld"><label for="fsp">Tür</label><select id="fsp"></select></div>
+      <div class="fld" id="fotherw" hidden><label for="fother">Tür adı</label><input type="text" id="fother" maxlength="40"></div>
+      <div class="row2">
+        <div class="fld"><label for="fsize">Boy (cm)</label><input type="number" id="fsize" inputmode="decimal" min="0" step="0.5"></div>
+        <div class="fld"><label for="fkg">Ağırlık (kg)</label><input type="number" id="fkg" inputmode="decimal" min="0" step="0.01"></div>
+      </div>
+      <div class="fld"><label for="fbait">Yem veya suni</label><input type="text" id="fbait" list="baitlist" maxlength="60">
+        <datalist id="baitlist"><option value="Minnow"><option value="Shad"><option value="Kaşık"><option value="Jig"><option value="Yüzey suni"><option value="Çapari"><option value="Kalamar sakarı"><option value="Karides"><option value="Midye"><option value="Yengeç"><option value="Deniz kurdu"><option value="Canlı yem"></datalist>
+      </div>
+      <div class="fld"><label for="fts">Tarih ve saat</label><input type="datetime-local" id="fts"></div>
+      <div class="fld"><label for="fnote">Not</label><textarea id="fnote" maxlength="400" placeholder="Nerede, nasıl tuttun, kimle gittin?"></textarea></div>
+      <label class="chk"><input type="checkbox" id="floc" checked><span id="floct">Konumu kaydet</span></label>
+      <p class="note">Rüzgâr, dalga, su sıcaklığı ve ay, kayıt saatine göre kendiliğinden eklenir.</p>
+      <p class="err" id="ferr" role="alert"></p>
+      <button type="submit" class="act" id="fsave">Kaydet</button>
+    </form>
+  </div>
+</div>
+
+<div class="ov" id="ovdetail" role="dialog" aria-modal="true" aria-label="Av detayı" hidden></div>
 
 <script>
 (function () {
@@ -695,7 +795,363 @@ select { font: 500 15px var(--f-body); color: var(--ink); background: var(--pape
     if (document.visibilityState === 'visible' && state.lat != null && Date.now() - state.loadedAt > 30 * 60 * 1000) load();
   });
 
-  window.__avsaati = { calc: calc, SPECIES: SPECIES, detectRegion: detectRegion, todOf: todOf, pressKey: pressKey, state: state };
+  /* ---------- av günlüğü: bu telefonda saklanır (IndexedDB) ---------- */
+  var JMSG = $('#jmsg').textContent || '';
+  var flashT = null;
+  function flash(msg) {
+    $('#jmsg').textContent = msg;
+    clearTimeout(flashT);
+    flashT = setTimeout(function () { $('#jmsg').textContent = JMSG; }, 7000);
+  }
+  function esc(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+  function fmtTs(ts) { return +ts.slice(8, 10) + ' ' + MONTHS[+ts.slice(5, 7) - 1] + ' ' + ts.slice(0, 4) + ' · ' + ts.slice(11, 16); }
+  function nowTs() {
+    var d = new Date();
+    return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()) + 'T' + pad(d.getHours()) + ':' + pad(d.getMinutes());
+  }
+
+  var dbp = null;
+  function openDb() {
+    if (!dbp) {
+      dbp = new Promise(function (res, rej) {
+        if (!window.indexedDB) { rej(new Error('indexedDB yok')); return; }
+        var r = indexedDB.open('avsaati', 1);
+        r.onupgradeneeded = function () { r.result.createObjectStore('av', { keyPath: 'id', autoIncrement: true }); };
+        r.onsuccess = function () { res(r.result); };
+        r.onerror = function () { rej(r.error); };
+      });
+    }
+    return dbp;
+  }
+  function run(mode, fn) {
+    return openDb().then(function (d) {
+      return new Promise(function (res, rej) {
+        var t = d.transaction('av', mode), req = fn(t.objectStore('av'));
+        t.oncomplete = function () { res(req ? req.result : undefined); };
+        t.onerror = t.onabort = function () { rej(t.error); };
+      });
+    });
+  }
+  var store = {
+    all: function () { return run('readonly', function (s) { return s.getAll(); }); },
+    add: function (it) { return run('readwrite', function (s) { return s.add(it); }); },
+    del: function (id) { return run('readwrite', function (s) { return s.delete(id); }); }
+  };
+
+  /* Fotoğrafı 1280 px'e küçültüp JPEG yapar, telefonda yer kalsın. */
+  function shrink(file) {
+    return new Promise(function (res, rej) {
+      var u = URL.createObjectURL(file), img = new Image();
+      img.onload = function () {
+        var k = Math.min(1, 1280 / Math.max(img.naturalWidth, img.naturalHeight));
+        var c = document.createElement('canvas');
+        c.width = Math.max(1, Math.round(img.naturalWidth * k));
+        c.height = Math.max(1, Math.round(img.naturalHeight * k));
+        c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+        URL.revokeObjectURL(u);
+        c.toBlob(function (b) { if (b) res(b); else rej(new Error('foto')); }, 'image/jpeg', .82);
+      };
+      img.onerror = function () { URL.revokeObjectURL(u); rej(new Error('foto')); };
+      img.src = u;
+    });
+  }
+
+  /* Seçilen saat, yüklü saatlik veride varsa o saatin koşulları ve tahmini. */
+  function snapshot(ts, speciesName) {
+    var key = ts.slice(0, 13), h = null;
+    for (var i = 0; i < state.hours.length; i++) {
+      if (state.hours[i].time.slice(0, 13) === key) { h = state.hours[i]; break; }
+    }
+    if (!h) return null;
+    var c = hourConds(h), sp = SPECIES.filter(function (s) { return s.ad === speciesName; })[0];
+    return {
+      cond: { wind: c.wind, dir: c.dir, wave: c.wave, temp: c.temp, tempEst: c.tempEst, hpa: c.hpa, press: c.press, tod: c.tod, moon: moonName(c.p), ill: c.ill },
+      pct: sp ? calc(sp, c).pct : null
+    };
+  }
+  function condText(c) {
+    if (!c) return '';
+    return TOD_AD[c.tod] + ' · rüzgâr ' + fmt(c.wind) + ' km/s ' + windName(c.dir) + ' · dalga ' + (c.wave == null ? 'veri yok' : fmt(c.wave, 1) + ' m') +
+      ' · su ' + fmt(c.temp, 1) + ' °C' + (c.tempEst ? ' (tahmini)' : '') + ' · basınç ' + fmt(c.hpa) + ' hPa, ' + PRESS_AD[c.press].toLowerCase() +
+      ' · ' + c.moon.toLowerCase() + ' (%' + fmt(Math.round(c.ill * 100)) + ')';
+  }
+  function summarize(list) {
+    var byS = {}, sum = 0, cnt = 0;
+    list.forEach(function (it) {
+      byS[it.species] = (byS[it.species] || 0) + 1;
+      if (it.pct != null) { sum += it.pct; cnt++; }
+    });
+    var top = null;
+    Object.keys(byS).forEach(function (k) { if (top === null || byS[k] > byS[top]) top = k; });
+    return { n: list.length, top: top, avg: cnt ? Math.round(sum / cnt) : null };
+  }
+  function title(it) { return it.species + (it.len ? ' · ' + fmt(it.len, it.len % 1 ? 1 : 0) + ' cm' : ''); }
+
+  var items = [], urls = [], detailUrl = null, openId = null, armed = false, armT = null;
+
+  function renderJournal() {
+    return store.all().then(function (all) {
+      items = all.sort(function (a, b) { return a.ts < b.ts ? 1 : a.ts > b.ts ? -1 : (b.id || 0) - (a.id || 0); });
+      urls.forEach(function (u) { URL.revokeObjectURL(u); });
+      urls = [];
+      $('#jcount').textContent = items.length ? String(items.length) : '';
+      var s = summarize(items), st = $('#jstats');
+      st.hidden = items.length === 0;
+      st.innerHTML = '<div class="stats3">' + [
+        ['Toplam av', String(s.n)], ['En çok', s.top || '—'], ['Tahmin ort.', s.avg == null ? '—' : '%' + s.avg]
+      ].map(function (x) {
+        return '<div class="stat"><span class="k">' + x[0] + '</span><span class="v">' + esc(x[1]) + '</span></div>';
+      }).join('') + '</div>';
+      $('#jgrid').innerHTML = items.length
+        ? '<div class="grid">' + items.map(function (it) {
+            var u = it.photo ? URL.createObjectURL(it.photo) : null;
+            if (u) urls.push(u);
+            return '<button type="button" class="tile" data-id="' + it.id + '">' +
+              (u ? '<img src="' + u + '" alt="' + esc(it.species) + ' fotoğrafı" loading="lazy">' : '<span class="noph">Fotoğraf yok</span>') +
+              '<span class="cap"><b>' + esc(title(it)) + '</b><i>' + esc(fmtTs(it.ts)) + '</i></span></button>';
+          }).join('') + '</div>'
+        : '<section class="panel empty"><h2>İlk avını ekle</h2><p class="note">Fotoğrafını çek, türü ve boyunu yaz. O günkü rüzgâr, dalga ve ay kayda kendiliğinden eklenir.</p></section>';
+    });
+  }
+
+  function lockOn(on) { document.documentElement.classList[on ? 'add' : 'remove']('lock'); }
+
+  function openDetail(id) {
+    var it = items.filter(function (x) { return x.id === id; })[0];
+    if (!it) return;
+    openId = id; armed = false;
+    if (detailUrl) URL.revokeObjectURL(detailUrl);
+    detailUrl = it.photo ? URL.createObjectURL(it.photo) : null;
+    var facts = [];
+    if (it.len) facts.push(fmt(it.len, it.len % 1 ? 1 : 0) + ' cm');
+    if (it.kg) facts.push(fmt(it.kg, 2) + ' kg');
+    if (it.bait) facts.push('Yem: ' + it.bait);
+    var where = it.region && REG[it.region] ? ' · ' + REG[it.region].ad : '';
+    var html = '<div class="sheet"><div class="sheet-head"><h2>' + esc(it.species) + '</h2><button type="button" class="ghost" id="dclose">Kapat</button></div>' +
+      (detailUrl ? '<img class="bigph" src="' + detailUrl + '" alt="' + esc(it.species) + ' fotoğrafı">' : '') +
+      '<p class="dmeta">' + esc(fmtTs(it.ts)) + esc(where) + '</p>' +
+      (facts.length ? '<p class="dmeta">' + esc(facts.join(' · ')) + '</p>' : '') +
+      (it.cond ? '<p class="dmeta">' + esc(condText(it.cond)) + '</p>' : '<p class="dmeta">Bu saat için koşul verisi yoktu.</p>') +
+      (it.pct != null ? '<p class="dmeta">O saatteki tahmin: %' + it.pct + ' (' + level(it.pct) + ')</p>' : '') +
+      (it.lat != null ? '<p class="dmeta"><a href="https://www.google.com/maps?q=' + it.lat + ',' + it.lon + '" target="_blank" rel="noopener">Konumu haritada aç</a></p>' : '') +
+      (it.note ? '<p class="dnote">' + esc(it.note) + '</p>' : '') +
+      '<div class="row2">' + (navigator.share ? '<button type="button" class="ghost" id="dshare">Paylaş</button>' : '') +
+      '<button type="button" class="ghost danger" id="ddel">Sil</button></div></div>';
+    var ov = $('#ovdetail');
+    ov.innerHTML = html;
+    ov.hidden = false;
+    ov.scrollTop = 0;
+    lockOn(true);
+  }
+  function closeDetail() {
+    $('#ovdetail').hidden = true;
+    $('#ovdetail').innerHTML = '';
+    if (detailUrl) { URL.revokeObjectURL(detailUrl); detailUrl = null; }
+    openId = null; armed = false; clearTimeout(armT);
+    lockOn(!$('#ovform').hidden);
+  }
+  function shareOpen() {
+    var it = items.filter(function (x) { return x.id === openId; })[0];
+    if (!it) return;
+    var text = title(it) + ' · Av Saati';
+    var data = { title: it.species, text: text };
+    if (it.photo && typeof File === 'function') {
+      var f = new File([it.photo], 'av.jpg', { type: 'image/jpeg' });
+      if (navigator.canShare && navigator.canShare({ files: [f] })) data.files = [f];
+    }
+    navigator.share(data).catch(function () {});
+  }
+  $('#ovdetail').addEventListener('click', function (e) {
+    var b = e.target.closest('button');
+    if (!b) return;
+    if (b.id === 'dclose') closeDetail();
+    else if (b.id === 'dshare') shareOpen();
+    else if (b.id === 'ddel') {
+      if (!armed) {
+        armed = true;
+        b.textContent = 'Silmek için tekrar dokun';
+        armT = setTimeout(function () { armed = false; b.textContent = 'Sil'; }, 4000);
+      } else {
+        var id = openId;
+        store.del(id).then(function () { closeDetail(); flash('Av silindi.'); return renderJournal(); }).catch(function () { flash('Silinemedi.'); });
+      }
+    }
+  });
+  $('#jgrid').addEventListener('click', function (e) {
+    var b = e.target.closest('button[data-id]');
+    if (b) openDetail(+b.dataset.id);
+  });
+
+  /* --- yeni av formu --- */
+  var pick = null, prevUrl = null;
+  var fsp = $('#fsp');
+  fsp.innerHTML = '<option value="" disabled selected>Tür seç</option>' +
+    SPECIES.map(function (sp) { return '<option>' + sp.ad + '</option>'; }).join('') + '<option>Diğer</option>';
+  fsp.addEventListener('change', function () { $('#fotherw').hidden = fsp.value !== 'Diğer'; });
+  function setPick(file) {
+    if (!file) return;
+    pick = file;
+    if (prevUrl) URL.revokeObjectURL(prevUrl);
+    prevUrl = URL.createObjectURL(file);
+    $('#fprev').src = prevUrl;
+    $('#fprev').hidden = false;
+    $('#fphint').hidden = true;
+  }
+  $('#fcam').addEventListener('change', function () { setPick(this.files && this.files[0]); });
+  $('#fgal').addEventListener('change', function () { setPick(this.files && this.files[0]); });
+
+  function openForm() {
+    fsp.value = '';
+    $('#fotherw').hidden = true;
+    ['#fother', '#fsize', '#fkg', '#fbait', '#fnote'].forEach(function (s) { $(s).value = ''; });
+    $('#fts').value = nowTs();
+    var loc = $('#floc');
+    loc.disabled = !state.gps;
+    loc.checked = !!state.gps;
+    $('#floct').textContent = state.gps ? 'Konumumu kaydet. Yalnızca bu telefonda kalır.' : 'Konum kaydı için konum izni gerekir.';
+    pick = null;
+    if (prevUrl) { URL.revokeObjectURL(prevUrl); prevUrl = null; }
+    $('#fprev').hidden = true;
+    $('#fprev').removeAttribute('src');
+    $('#fphint').hidden = false;
+    $('#ferr').textContent = '';
+    $('#fsave').disabled = false;
+    $('#ovform').hidden = false;
+    $('#ovform').scrollTop = 0;
+    lockOn(true);
+  }
+  function closeForm() {
+    $('#ovform').hidden = true;
+    lockOn(!$('#ovdetail').hidden);
+  }
+  $('#jadd').addEventListener('click', openForm);
+  $('#fclose').addEventListener('click', closeForm);
+
+  $('#fform').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var err = $('#ferr'), btn = $('#fsave');
+    err.textContent = '';
+    var sp = fsp.value, name = sp === 'Diğer' ? $('#fother').value.trim() : sp;
+    if (!sp) { err.textContent = 'Türü seç.'; return; }
+    if (!name) { err.textContent = 'Tür adını yaz.'; return; }
+    var ts = $('#fts').value || nowTs();
+    var len = parseFloat($('#fsize').value), kg = parseFloat($('#fkg').value);
+    btn.disabled = true;
+    var pr = pick ? shrink(pick) : Promise.resolve(null);
+    pr.then(function (blob) {
+      var snap = snapshot(ts, sp);
+      var it = {
+        uid: Date.now().toString(36) + Math.random().toString(36).slice(2, 8),
+        ts: ts, species: name, len: isNaN(len) ? null : len, kg: isNaN(kg) ? null : kg,
+        bait: $('#fbait').value.trim(), note: $('#fnote').value.trim(), photo: blob, region: state.region,
+        cond: snap ? snap.cond : null, pct: snap ? snap.pct : null
+      };
+      if ($('#floc').checked && state.gps && state.lat != null) {
+        it.lat = Math.round(state.lat * 1000) / 1000;
+        it.lon = Math.round(state.lon * 1000) / 1000;
+      }
+      return store.add(it);
+    }).then(function () {
+      closeForm();
+      flash('Kaydedildi.');
+      if (navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(function () {});
+      renderJournal().catch(function () {});
+    }).catch(function () {
+      err.textContent = 'Kaydedilemedi. Telefonda yer kalmamış olabilir ya da tarayıcı bu siteye kayıt izni vermiyor.';
+    }).then(function () { btn.disabled = false; });
+  });
+
+  /* --- yedek --- */
+  function toDataUrl(b) {
+    return new Promise(function (res, rej) {
+      var r = new FileReader();
+      r.onload = function () { res(r.result); };
+      r.onerror = function () { rej(r.error); };
+      r.readAsDataURL(b);
+    });
+  }
+  $('#jexport').addEventListener('click', function () {
+    store.all().then(function (all) {
+      if (!all.length) { flash('Yedeklenecek av yok.'); return null; }
+      return Promise.all(all.map(function (it) {
+        var o = {};
+        Object.keys(it).forEach(function (k) { if (k !== 'id' && k !== 'photo') o[k] = it[k]; });
+        if (!it.photo) { o.photo = null; return o; }
+        return toDataUrl(it.photo).then(function (d) { o.photo = d; return o; });
+      })).then(function (arr) {
+        var blob = new Blob([JSON.stringify({ app: 'av-saati', v: 1, items: arr })], { type: 'application/json' });
+        var a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'av-saati-yedek-' + nowTs().slice(0, 10) + '.json';
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        setTimeout(function () { URL.revokeObjectURL(a.href); }, 5000);
+        flash(arr.length + ' av yedeklendi. Dosya İndirilenler klasörüne indi.');
+      });
+    }).catch(function () { flash('Yedek alınamadı.'); });
+  });
+  $('#jimport').addEventListener('change', function () {
+    var input = this, f = input.files && input.files[0];
+    if (!f) return;
+    f.text().then(function (txt) {
+      var data = JSON.parse(txt);
+      if (!data || data.app !== 'av-saati' || !Array.isArray(data.items)) throw new Error('biçim');
+      return store.all().then(function (cur) {
+        var have = {};
+        cur.forEach(function (x) { have[x.uid] = 1; });
+        var fresh = data.items.filter(function (x) { return x && x.uid && x.species && x.ts && !have[x.uid]; });
+        return fresh.reduce(function (p, x) {
+          return p.then(function () {
+            var it = {};
+            Object.keys(x).forEach(function (k) { it[k] = x[k]; });
+            if (typeof x.photo === 'string' && x.photo.indexOf('data:') === 0) {
+              return fetch(x.photo).then(function (r) { return r.blob(); }).then(function (b) { it.photo = b; return store.add(it); });
+            }
+            it.photo = null;
+            return store.add(it);
+          });
+        }, Promise.resolve()).then(function () { return fresh.length; });
+      });
+    }).then(function (n) {
+      flash(n + ' av geri yüklendi.');
+      return renderJournal();
+    }).catch(function () {
+      flash('Yedek okunamadı. Bu uygulamanın aldığı bir .json dosyası seç.');
+    }).then(function () { input.value = ''; });
+  });
+
+  /* --- sekmeler --- */
+  function showTab(j) {
+    $('#vf').hidden = j;
+    $('#vj').hidden = !j;
+    $('#tab-f').setAttribute('aria-selected', String(!j));
+    $('#tab-j').setAttribute('aria-selected', String(j));
+    $('#jadd').hidden = !j;
+    if (j) {
+      renderJournal().catch(function () {
+        $('#jgrid').innerHTML = '<section class="panel"><p class="err">Günlük açılamadı. Tarayıcı bu sitenin verisini kaydetmeye izin vermiyor olabilir.</p></section>';
+      });
+    }
+    window.scrollTo(0, 0);
+  }
+  $('#tab-f').addEventListener('click', function () { showTab(false); });
+  $('#tab-j').addEventListener('click', function () { showTab(true); });
+  document.addEventListener('keydown', function (e) {
+    if (e.key !== 'Escape') return;
+    if (!$('#ovdetail').hidden) closeDetail();
+    else if (!$('#ovform').hidden) closeForm();
+  });
+  store.all().then(function (a) { $('#jcount').textContent = a.length ? String(a.length) : ''; }).catch(function () {});
+
+  window.__avsaati = {
+    calc: calc, SPECIES: SPECIES, detectRegion: detectRegion, todOf: todOf, pressKey: pressKey, state: state,
+    journal: { store: store, snapshot: snapshot, summarize: summarize, condText: condText, fmtTs: fmtTs, esc: esc, renderJournal: renderJournal, showTab: showTab }
+  };
   if ('serviceWorker' in navigator && location.protocol === 'https:') {
     navigator.serviceWorker.register('sw.js').catch(function () {});
   }
