@@ -111,6 +111,10 @@ select { font: 500 15px var(--f-body); color: var(--ink); background: var(--pape
 #results { display: flex; flex-direction: column; gap: 10px; }
 .results-head { display: flex; flex-direction: column; gap: 4px; }
 .genel { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 16px; display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
+.ban { font-weight: 600; color: var(--buoy); margin-bottom: 8px; }
+.ban.on { background: var(--warn-bg); color: var(--warn-ink); padding: 10px 12px; border-radius: 8px; }
+.sp.closed { opacity: .8; }
+.sp .pct.shut { font: 600 22px/1 var(--f-display); letter-spacing: .04em; text-transform: uppercase; color: var(--buoy); }
 .gbig { font: 700 64px/1 var(--f-display); color: var(--buoy); font-variant-numeric: tabular-nums; margin-top: 6px; }
 .gbig small { font-size: 28px; }
 .gtxt { display: flex; flex-direction: column; gap: 3px; min-width: 0; flex: 1 1 12rem; }
@@ -548,7 +552,7 @@ html.lock { overflow: hidden; }
     'Ahtapot': {
       rigs: ['ahtapot'],
       steps: ['Örgü ipi (PE 1.5–2.5) makaraya doldur.', 'Ucuna kalın, 0.50–0.60 mm floro ön misinayı bağla. Kayalıkta takılmaya dayansın.', 'Ön misinanın ucuna ahtapot jigini tak, üstüne yengeç bağla. Deliğin yanına indir, ahtapot sarılınca yavaşça ve sabit çek.'],
-      terms: [['Ahtapot jigi', 'Ağırlığı ve iğneyi birleştiren, üzerine yengeç bağlanan ahtapot yemi.'], ['Kalın floro', 'Kayalıkta aşınmaya ve takılmaya karşı kalın seçilen ön misina.'], ['Av yasağı ve boy', 'Ahtapotta av yasağı ve boy sınırı güncel Su Ürünleri Tebliği ile bölgene göre değişebilir. Çıkmadan önce kontrol et.']]
+      terms: [['Ahtapot jigi', 'Ağırlığı ve iğneyi birleştiren, üzerine yengeç bağlanan ahtapot yemi.'], ['Kalın floro', 'Kayalıkta aşınmaya ve takılmaya karşı kalın seçilen ön misina.'], ['Av yasağı ve boy', 'Ahtapotta av yasağı, boy ve adet sınırı tebliğe göre değişir. Yukarıdaki "Av kuralları" bölümüne bak ve çıkmadan önce güncel resmî metinden kontrol et.']]
     },
     'Kefal': {
       rigs: ['samandira'],
@@ -580,6 +584,26 @@ html.lock { overflow: hidden; }
 
   /* Kıyıdan tek çıkışta tutma kolaylığı (1 = çok kolay). Veriyle değil, genel balıkçılık bilgisiyle konmuş başlangıç değerleri. */
   var EASE = { 'İstavrit': .5, 'Palamut': .45, 'Lüfer': .45, 'Karagöz': .42, 'Kalamar': .42, 'Levrek': .38, 'Çipura': .38, 'Mırmır': .38, 'Ahtapot': .33, 'Kefal': .3 };
+
+  /* Av kuralları (boy, adet, yasak dönem). Elle girilmiş tablodur; resmî tebliğle karşılaştırılmadı, güncel metinden kontrol edilmeli. */
+  var RULES = {
+    'İstavrit': { boy: '13 cm', adet: 'Adet sınırı yok', kg: true },
+    'Çipura':   { boy: '20 cm', adet: 'Adet sınırı yok', kg: true },
+    'Mırmır':   { boy: '20 cm', adet: 'Adet sınırı yok', kg: true },
+    'Kefal':    { boy: '20 cm', adet: 'Adet sınırı yok', kg: true },
+    'Karagöz':  { boy: '18 cm', adet: 'Adet sınırı yok', kg: true },
+    'Palamut':  { boy: '25 cm', adet: 'En fazla 5 adet', kg: false },
+    'Lüfer':    { boy: '18 cm', adet: 'En fazla 5 adet', kg: false },
+    'Levrek':   { boy: '25 cm', adet: 'En fazla 3 adet', kg: false },
+    'Kalamar':  { boy: 'Boy sınırı yok', adet: 'En fazla 10 adet', kg: false },
+    'Ahtapot':  { boy: 'En az 1 kg (ağırlık)', adet: 'En fazla 1 adet', kg: false, yasak: [4, 1, 9, 31], yasakMetin: '1 Mayıs – 31 Ekim arası avı tamamen yasak' }
+  };
+  function isClosed(sp, date) {
+    var r = RULES[sp.ad];
+    if (!r || !r.yasak) return false;
+    var y = r.yasak, v = date.getMonth() * 100 + date.getDate();
+    return v >= y[0] * 100 + y[1] && v <= y[2] * 100 + y[3];
+  }
 
   var FACT = [['season','Mevsim',.26],['temp','Su sıcaklığı',.24],['tod','Saat',.16],['wave','Dalga',.12],['wind','Rüzgâr',.09],['press','Basınç',.08],['moon','Ay',.05]];
 
@@ -666,18 +690,29 @@ html.lock { overflow: hidden; }
     /* Koşullar mükemmel olsa bile her çıkışta balık tutulmaz: türün zorluk payı tavanı belirler. */
     var pct = 100 * (EASE[sp.ad] || .4) * Math.pow(Math.exp(lg), 3) * (sp.avail[c.region] || .3);
     pct = Math.max(1, Math.min(50, Math.round(pct)));
+    if (isClosed(sp, c.date)) return { pct: 0, closed: true, f: f, limit: null };
     return { pct: pct, f: f, limit: worst && f[worst] < .75 ? worst : null };
   }
   function level(p) { return p < 10 ? 'Düşük' : p < 22 ? 'Orta' : p < 35 ? 'İyi' : 'Çok iyi'; }
   /* Genel av ihtimali: tüm türlerin ortalaması. Tek tür yüzdelerinden düşüktür, bölgeye göre değişir. */
   function genel(c) {
-    var sum = 0, best = null;
+    var sum = 0, n = 0, best = null;
     SPECIES.forEach(function (sp) {
-      var p = calc(sp, c).pct;
-      sum += p;
-      if (!best || p > best.pct) best = { ad: sp.ad, pct: p };
+      var r = calc(sp, c);
+      if (r.closed) return;
+      sum += r.pct; n++;
+      if (!best || r.pct > best.pct) best = { ad: sp.ad, pct: r.pct };
     });
-    return { pct: Math.round(sum / SPECIES.length), best: best };
+    return { pct: n ? Math.round(sum / n) : 0, best: best || { ad: '—', pct: 0 }, n: n };
+  }
+  function rulesHtml(sp, closed) {
+    var r = RULES[sp.ad];
+    if (!r) return '';
+    return '<div><h3>Av kuralları</h3>' +
+      (r.yasak ? '<p class="ban' + (closed ? ' on' : '') + '">' + r.yasakMetin + '</p>' : '') +
+      '<dl class="gear"><div><dt>Asgari</dt><dd>' + r.boy + '</dd></div>' +
+      '<div><dt>Limit</dt><dd>' + r.adet + (r.kg ? '. Günlük toplam 5 kg kuralına tabidir.' : '') + '</dd></div></dl>' +
+      '<p class="note">Bu bilgiler elle girildi. Av öncesi Tarım ve Orman Bakanlığı\'nın güncel amatör avcılık tebliğinden kontrol et, kurallar değişebilir.</p></div>';
   }
 
   /* ---------- durum ve veri ---------- */
@@ -825,7 +860,7 @@ html.lock { overflow: hidden; }
     al.textContent = msgs.join(' ');
 
     var list = SPECIES.map(function (sp) { return { sp: sp, r: calc(sp, c) }; })
-      .sort(function (a, b) { return b.r.pct - a.r.pct; });
+      .sort(function (a, b) { return (a.r.closed ? 1 : 0) - (b.r.closed ? 1 : 0) || b.r.pct - a.r.pct; });
 
     var g = genel(c);
     var html = '<div class="genel"><div><span class="eyebrow">Genel av ihtimali</span><div class="gbig">' + g.pct + '<small>%</small></div></div>' +
@@ -833,12 +868,14 @@ html.lock { overflow: hidden; }
       '<div class="results-head"><h2>Türlere göre</h2><p class="note">Her yüzde, o türün kıyıdan tek bir çıkışta tutulma ihtimali. Bir türe dokun, nedenini ve takımı gör.</p></div>';
     list.forEach(function (it, i) {
       var sp = it.sp, r = it.r;
-      html += '<details class="sp' + (i === 0 ? ' top1' : '') + '"' + (i === 0 ? ' open' : '') + '>' +
+      html += '<details class="sp' + (i === 0 && !r.closed ? ' top1' : '') + (r.closed ? ' closed' : '') + '"' + (i === 0 && !r.closed ? ' open' : '') + '>' +
         '<summary><div><span class="name">' + sp.ad + '</span><span class="latin">' + sp.lat + '</span></div>' +
-        '<div><div class="pct">' + r.pct + '<small>%</small></div><div class="level">' + level(r.pct) + '</div></div>' +
-        '<div class="bar"><i style="width:' + r.pct + '%"></i></div></summary>' +
-        '<div class="body"><div><h3>Puanın nedeni</h3>' +
-        (r.limit ? '<p class="limit">Sınırlayan etken: ' + factName(r.limit).toLowerCase() + ' (' + valueText(r.limit, c) + ').</p>' : '<p class="limit">Koşullar bu tür için genel olarak uygun.</p>') +
+        (r.closed
+          ? '<div><div class="pct shut">Yasak</div><div class="level">Av yasağı</div></div><div class="bar"><i style="width:0"></i></div>'
+          : '<div><div class="pct">' + r.pct + '<small>%</small></div><div class="level">' + level(r.pct) + '</div></div>' +
+            '<div class="bar"><i style="width:' + r.pct + '%"></i></div>') + '</summary>' +
+        '<div class="body">' + rulesHtml(sp, r.closed) + '<div><h3>Puanın nedeni</h3>' +
+        (r.closed ? '<p class="limit">Av yasağı döneminde yüzde hesaplanmaz.</p>' : r.limit ? '<p class="limit">Sınırlayan etken: ' + factName(r.limit).toLowerCase() + ' (' + valueText(r.limit, c) + ').</p>' : '<p class="limit">Koşullar bu tür için genel olarak uygun.</p>') +
         '</div><div class="factors">' +
         FACT.map(function (x) {
           return '<div class="fct"><span>' + x[1] + '</span><span class="v">' + valueText(x[0], c) + '</span>' +
@@ -987,7 +1024,7 @@ html.lock { overflow: hidden; }
     var c = hourConds(h), sp = SPECIES.filter(function (s) { return s.ad === speciesName; })[0];
     return {
       cond: { wind: c.wind, dir: c.dir, wave: c.wave, temp: c.temp, tempEst: c.tempEst, hpa: c.hpa, press: c.press, tod: c.tod, moon: moonName(c.p), ill: c.ill },
-      pct: sp ? calc(sp, c).pct : null
+      pct: sp && !calc(sp, c).closed ? calc(sp, c).pct : null
     };
   }
   function condText(c) {
